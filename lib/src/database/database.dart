@@ -7,13 +7,13 @@ import 'package:sqflite/sqflite.dart';
 import 'package:tutorial_flutter_sqflite/src/model/car_model.dart';
 
 class CarDatabase {
-  static final CarDatabase _instance = CarDatabase._();
+  static final CarDatabase _instance = CarDatabase._();//Private Constructor
   static Database _database;
 
   CarDatabase._();
 
-  factory CarDatabase() {
-    return _instance;
+   factory CarDatabase() {//hna brg3 el CarDatabase instance Value Static
+    return _instance; //A factory interface reports the type of the created objects.
   }
 
   Future<Database> get db async {
@@ -27,8 +27,8 @@ class CarDatabase {
   }
 
   Future<Database> init() async {
-    Directory directory = await getApplicationDocumentsDirectory();
-    String dbPath = join(directory.path, 'database.db');
+    Directory directory = await getApplicationDocumentsDirectory();//app folder on my device
+    String dbPath = join(directory.path, 'database.db');//file eli hyb2a feh el data
     var database = openDatabase(dbPath, version: 1, onCreate: _onCreate, onUpgrade: _onUpgrade);
 
     return database;
@@ -52,13 +52,13 @@ class CarDatabase {
 
   Future<int> addCar(Car car) async {
     var client = await db;
-    return client.insert('car', car.toMapForDb(), conflictAlgorithm: ConflictAlgorithm.replace);
+    return client.insert('car', car.toMapForDb(), conflictAlgorithm: ConflictAlgorithm.replace);//law fe 7aga bnfs el asm b3ml replace bl value bta3ty
   }
 
   Future<Car> fetchCar(int id) async {
     var client = await db;
     final Future<List<Map<String, dynamic>>> futureMaps = client.query('car', where: 'id = ?', whereArgs: [id]);
-    var maps = await futureMaps;
+    var maps = await futureMaps;//List<Map<String, dynamic>>
 
     if (maps.length != 0) {
       return Car.fromDb(maps.first);
